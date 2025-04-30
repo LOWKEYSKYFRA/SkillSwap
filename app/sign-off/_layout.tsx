@@ -29,7 +29,7 @@ export default function RootLayout({children}:{children:React.ReactNode}) {
   }
 
   return (
-      <Stack screenOptions={{headerShown:false}}>
+      <Stack screenOptions={{headerShown:true,headerTitle:"Log In"}}>
         {children}
       </Stack>
         

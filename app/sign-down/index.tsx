@@ -40,8 +40,8 @@ const SignupScreen = () =>  {
             <TouchableOpacity
              onPress={handleSignup} 
              style={styles.Button} 
-            >
-            Register
+            >  <Text style={{width:200, textAlign:"center",fontSize:30, color:"white",verticalAlign:"center",margin:"auto"}}>sign up</Text>
+            
             </TouchableOpacity>
          </View>
     </ImageBackground>
@@ -59,7 +59,7 @@ export default function App(){
 const styles = StyleSheet.create({
   Button:{
     width: "100%",
-    height: 30,
+    height: 50,
     backgroundColor:"brown",
     borderRadius:20,
     color:"white"
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     color: "",
     backgroundColor:"white",
-    opacity:0.8,
+    opacity:0.7,
     borderRadius:30,
     marginTop:90,
     marginBottom:90,

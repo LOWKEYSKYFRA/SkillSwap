@@ -25,7 +25,7 @@ export default function secondscreen() {
               }}>
          
              <View style={styles.getStartedbtm} >
-                <Text style={{width:200, textAlign:"center",fontSize:30, color:"black"}}>Log In</Text>
+                <Text style={{width:200, textAlign:"center",fontSize:30, color:"black",alignItems:"center"}}>Log In</Text>
                  </View>
            </TouchableOpacity >
         
