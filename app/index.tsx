@@ -1,71 +1,39 @@
-import { useRouter } from 'expo-router';
-import { Image, StyleSheet, Platform, Text, View, ImageBackground, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import React from "react";
 
+export default function Index() {
+  const router = useRouter();
 
+  useEffect(() => {
+    // Simulate loading
+    const timeout = setTimeout(() => {
+      // later we’ll check auth status here
+      router.replace("/splash");
+    }, 1000);
 
-export default function HomeScreen() {
-  const bgImage = require("../assets/images/tyre.jpg")
-  const router =useRouter()
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
-   <ImageBackground style={styles.backgroundImage} source={bgImage}>
-      <View style={styles.opacityContainer}>
-        <Text style={styles.helloText}>
-          Hello"
-        
-        </Text>
-      </View>
-      <View style={{width:"100%",gap:40}} >
-        <Text style={{fontSize:30, color:"white", width:"100%", textAlign:"center"}}>Post it. Solve it. SkillSwap it</Text>
-        <TouchableOpacity  onPress={()=>{
-          router.push("./sign-up")
-
-        }}>
-          <View style={styles.getStartedbtn} >
-            <Text style={{width:200, textAlign:"center",fontSize:30, color:"white"}}>Get Started</Text>
-            </View>
-           
-        </TouchableOpacity>
-     </View>
-   </ImageBackground>
-    
-  )
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="#007aff" />
+      <Text style={styles.text}>Loading SkillSwap...</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  title:{
-    fontSize:90,
-    color:"grey",
-    width:200,
-    textAlign:"center"
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
-  backgroundImage:{width:"100%",height:"100%", alignItems:'center',justifyContent:"space-between"},
-  opacityContainer:{
-    width:300,
-    height:150,
-    opacity:0.50,
-    backgroundColor:"#ffffff",
-    borderRadius:20,
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:50,
-    backdropFilter:"blur(30px)"
+  text: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#666",
   },
-  helloText:{
-    fontSize:50,
-    width:"100%",
-    height:"100%",
-    verticalAlign:"middle",
-    textAlign:"center",
-    color:""
-  },
-  getStartedbtn:{
-    backgroundColor:"brown",
-    borderRadius:1000,
-    width:"80%",
-    height:50,
-    margin:"auto",
-    alignItems:"center",
-    justifyContent:"center",
-    marginBottom:20
-  }
 });
