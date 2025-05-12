@@ -1,36 +1,56 @@
-import { useEffect } from "react";
-import { useRouter } from "expo-router";
-import { View, Image, StyleSheet, ActivityIndicator } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Image,
+  ActivityIndicator,
+  Alert,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React from "react";
+import { useRouter } from "expo-router";
 
 export default function Splash() {
   const router = useRouter();
+  const logoOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const checkFirstTimeUser = async () => {
-      const hasSeenOnboarding = await AsyncStorage.getItem("hasSeenOnboarding");
+    // Animate logo fade-in
+    Animated.timing(logoOpacity, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
 
-      setTimeout(() => {
-        if (hasSeenOnboarding === "true") {
-          router.replace("/welcome");
-        } else {
-          router.replace("/onboarding");
-        }
-      }, 2000); // simulate loading
+    // Check if user has completed onboarding
+    const checkUserStatus = async () => {
+      try {
+        const hasSeenOnboarding = await AsyncStorage.getItem("hasSeenOnboarding");
+
+        setTimeout(() => {
+          if (hasSeenOnboarding === "true") {
+            router.replace("/welcome");
+          } else {
+            router.replace("/welcome");
+          }
+        }, 1800); // keep a smooth delay to enjoy splash
+      } catch (error) {
+        console.error("AsyncStorage error:", error);
+        Alert.alert("Oops!", "Something went wrong. Please try again.");
+      }
     };
 
-    checkFirstTimeUser();
+    checkUserStatus();
   }, []);
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/splash.png")} // your app logo here
-        style={styles.logo}
+      <Animated.Image
+        source={require("../assets/images/splash.png")}
+        style={[styles.logo, { opacity: logoOpacity }]}
         resizeMode="contain"
       />
-      <ActivityIndicator size="large" color="#007aff" style={{ marginTop: 20 }} />
+      <ActivityIndicator size="large" color="#007aff" style={{ marginTop: 24 }} />
     </View>
   );
 }
@@ -40,11 +60,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 220,
+    height: 220,
   },
 });
-

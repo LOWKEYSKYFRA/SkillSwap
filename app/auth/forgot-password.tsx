@@ -1,89 +1,105 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { useState } from "react";
+// app/auth/forgot-password.tsx
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useRouter } from "expo-router";
-import React from "react";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../../firebase/config";
 
-export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
+export default function ForgotPasswordScreen(): React.JSX.Element {
   const router = useRouter();
+  const [email, setEmail] = useState("");
 
-  const handlePasswordReset = () => {
-    if (!email.includes("@")) {
-      Alert.alert("Invalid Email", "Please enter a valid email address.");
-      return;
+  const handleReset = async () => {
+    if (!email) {
+      return Alert.alert("Missing Email", "Please enter your email.");
     }
 
-    // 🔥 We'll hook this to Firebase later
-    Alert.alert("Email Sent", "Check your inbox to reset your password.");
-    router.back();
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert("Reset Email Sent", "Check your inbox to reset your password.");
+      router.push("/auth/login");
+    } catch (error: any) {
+      Alert.alert("Reset Error", error.message);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
-      <Text style={styles.subtitle}>Enter your email to reset your password</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Reset Your Password</Text>
+      <Text style={styles.info}>
+        Enter your registered email and we’ll send you a link to reset your password.
+      </Text>
 
       <TextInput
-        placeholder="Email Address"
         style={styles.input}
-        keyboardType="email-address"
-        autoCapitalize="none"
+        placeholder="Enter your email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handlePasswordReset}>
-        <Text style={styles.buttonText}>Send Reset Link</Text>
+      <TouchableOpacity style={styles.button} onPress={handleReset}>
+        <Text style={styles.buttonText}>Send Reset Email</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.backLink}>Go Back</Text>
+      <TouchableOpacity onPress={() => router.push("/auth/login")}>
+        <Text style={styles.linkText}>Back to Login</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingHorizontal: 30,
-    justifyContent: "center",
+    padding: 24,
+    paddingTop: 80,
     backgroundColor: "#fff",
+    flexGrow: 1,
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#333",
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666",
     marginBottom: 20,
+    color: "#222",
+  },
+  info: {
+    fontSize: 15,
+    color: "#555",
+    marginBottom: 24,
+    textAlign: "center",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
+    borderColor: "#ddd",
+    backgroundColor: "#f9f9f9",
     padding: 14,
+    borderRadius: 12,
     marginBottom: 20,
-    fontSize: 16,
   },
   button: {
-    backgroundColor: "#007aff",
-    paddingVertical: 14,
-    borderRadius: 10,
+    backgroundColor: "#007AFF",
+    padding: 16,
+    borderRadius: 12,
     alignItems: "center",
     marginBottom: 20,
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 16,
   },
-  backLink: {
-    color: "#007aff",
+  linkText: {
     textAlign: "center",
-    fontSize: 16,
+    color: "#007AFF",
+    fontWeight: "500",
+    fontSize: 14,
   },
 });

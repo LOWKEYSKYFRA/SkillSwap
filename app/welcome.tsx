@@ -12,8 +12,12 @@ export default function Welcome() {
         style={styles.logo}
         resizeMode="contain"
       />
+
       <Text style={styles.title}>Welcome to SkillSwap</Text>
       <Text style={styles.subtitle}>Post. Solve. Grow.</Text>
+      <Text style={styles.description}>
+        Exchange your skills and solve real-world problems with others like you.
+      </Text>
 
       <TouchableOpacity
         style={styles.buttonPrimary}
@@ -41,21 +45,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   logo: {
-    width: 200,
-    height: 200,
-    marginBottom: 30,
+    width: 180,
+    height: 180,
+    marginBottom: 25,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 30,
+    fontWeight: "700",
+    color: "#1a1a1a",
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
+    color: "#007aff",
+    marginTop: 6,
+    fontWeight: "600",
+  },
+  description: {
+    fontSize: 14,
     color: "#666",
     textAlign: "center",
-    marginVertical: 20,
+    marginTop: 12,
+    marginBottom: 30,
+    paddingHorizontal: 10,
   },
   buttonPrimary: {
     backgroundColor: "#007aff",
@@ -63,6 +75,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
     borderRadius: 30,
     marginBottom: 15,
+    elevation: 2,
   },
   buttonSecondary: {
     borderColor: "#007aff",

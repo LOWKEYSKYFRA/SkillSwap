@@ -1,14 +1,63 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+// app/auth/signup.tsx
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import React from "react";
+import { auth, db } from "../../firebase/config";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
-export default function SignUp() {
+export default function SignupScreen() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignUp = async () => {
+    if (!fullName || !email || !password || !confirmPassword) {
+      return Alert.alert("Missing Fields", "Please fill in all the fields.");
+    }
+
+    if (password !== confirmPassword) {
+      return Alert.alert("Password Mismatch", "Passwords do not match.");
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName: fullName });
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullName,
+        email,
+        createdAt: new Date().toISOString(),
+      });
+
+      await sendEmailVerification(user);
+
+      Alert.alert(
+        "Account Created",
+        "A verification email has been sent. Please check your inbox."
+      );
+
+      router.replace("/auth/login");
+    } catch (error: any) {
+      Alert.alert("Signup Error", error.message);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -24,34 +73,34 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="Email Address"
-        value={email}
-        onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
 
       <TextInput
         style={styles.input}
         placeholder="Password"
+        secureTextEntry
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
       />
 
       <TextInput
         style={styles.input}
         placeholder="Confirm Password"
+        secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
-        secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => router.push("/auth/login")}>
-        <Text style={styles.link}>Already have an account? Log in</Text>
+        <Text style={styles.linkText}>Already have an account? Log in</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -59,39 +108,41 @@ export default function SignUp() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    padding: 24,
     paddingTop: 80,
     backgroundColor: "#fff",
     flexGrow: 1,
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 30,
-    color: "#333",
+    marginBottom: 32,
+    color: "#222",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#ddd",
+    backgroundColor: "#f9f9f9",
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#007aff",
+    backgroundColor: "#007AFF",
     padding: 16,
-    borderRadius: 10,
-    marginBottom: 20,
+    borderRadius: 12,
     alignItems: "center",
+    marginBottom: 20,
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "600",
     fontSize: 16,
   },
-  link: {
+  linkText: {
     textAlign: "center",
-    color: "#007aff",
-    fontWeight: "600",
+    color: "#007AFF",
+    fontWeight: "500",
+    fontSize: 14,
   },
 });
