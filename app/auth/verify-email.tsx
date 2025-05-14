@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { auth } from "../../firebase/config";
+import { auth } from "../../firebase";
 import { sendEmailVerification } from "firebase/auth";
 
 export default function VerifyEmailScreen() {

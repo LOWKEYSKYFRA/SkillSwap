@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { auth, db } from "../../firebase/config";
+import { auth, db } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,

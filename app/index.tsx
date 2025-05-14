@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/config";
-
+import { auth } from "@/firebase";
 export default function Index() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);

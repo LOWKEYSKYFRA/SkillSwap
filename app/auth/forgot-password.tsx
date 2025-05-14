@@ -10,8 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "../../firebase/config";
-
+import { auth } from "../../firebase";
 export default function ForgotPasswordScreen(): React.JSX.Element {
   const router = useRouter();
   const [email, setEmail] = useState("");

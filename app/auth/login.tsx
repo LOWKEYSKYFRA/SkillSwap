@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase";
 
 export default function LoginScreen() {
   const router = useRouter();
