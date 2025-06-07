@@ -16,6 +16,7 @@
         "foregroundImage": "./assets/images/SkillSwap.png",
         "backgroundColor": "#ffffff"
       },
+      "edgeToEdgeEnabled": true,
       "package": "com.bitbybit.skillswap"
     },
     "web": {
